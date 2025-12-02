@@ -1,3 +1,4 @@
 pyrogram==2.0.106
 tgcrypto==1.2.3
 python-dotenv==1.0.0
+tronpy==2.10.0
