@@ -6,7 +6,6 @@ from escrow import EscrowManager
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-TRX_ADDRESS = os.getenv("TRX_ADDRESS")
 COMMISSION_PERCENT = int(os.getenv("COMMISSION_PERCENT", 10))
 
 app = Client("trx_bot", bot_token=BOT_TOKEN)
@@ -15,7 +14,7 @@ escrow_mgr = EscrowManager(COMMISSION_PERCENT)
 @app.on_message(filters.command("wallet"))
 async def wallet(client, message):
     balance = escrow_mgr.get_balance(message.from_user.id)
-    await message.reply(f"TRX Adresiniz: {TRX_ADDRESS}\nBakiyeniz: {balance} TRX")
+    await message.reply(f"Bakiyeniz: {balance} TRX")
 
 @app.on_message(filters.command("balance"))
 async def balance(client, message):
@@ -24,7 +23,9 @@ async def balance(client, message):
 
 @app.on_message(filters.command("ticaret"))
 async def ticaret(client, message):
-    escrow_id = escrow_mgr.create_escrow(message.from_user.id, 100)  # demo 100 TRX
+    # Satıcı TRX adresini burada girecek (demo)
+    seller_trx = os.getenv("TRX_ADDRESS")
+    escrow_id = escrow_mgr.create_escrow(message.from_user.id, 100, seller_trx)
     await message.reply(f"Ticaret ilanı oluşturuldu. Escrow ID: {escrow_id}\nAlıcı bekleniyor...")
 
 @app.on_message(filters.command("buy"))
